@@ -1,7 +1,7 @@
 import requests
 
 from messages import make_msg, AvailableLanguagesEnum, AvailableMessages
-from server_api import send_activity
+from server_api import send_activity, get_exercises
 from .base import CommandHandler, URL
 
 
@@ -13,9 +13,9 @@ class ActivityAddCommandHandler(CommandHandler):
     def types_check(self, text_parts: list):
         msgs = []
         command, activity_name, iterations_count, pause_before_item = text_parts
-        ALLOWED_ACTIVITES = ['push-ups', 'press']
-        if activity_name not in ALLOWED_ACTIVITES:
-            activities_str = ", ".join(ALLOWED_ACTIVITES)
+        allowed_activities = get_exercises()
+        if activity_name not in allowed_activities:
+            activities_str = ", ".join(allowed_activities)
             msgs.append(
                 make_msg(
                     AvailableMessages.command__activity_add__unknown_activity,

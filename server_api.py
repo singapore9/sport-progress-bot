@@ -10,3 +10,11 @@ def send_activity(activity_name, iterations_count, pause_before_item):
         "pause_before_item": pause_before_item
     })
     return r.status_code == 200
+
+
+def get_exercises():
+    r = requests.get(f"{API_URL}/api/exercise/")
+    exercises = []
+    if r.status_code == 200:
+        exercises = r.json()['list'][0]
+    return exercises

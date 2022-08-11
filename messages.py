@@ -66,6 +66,7 @@ class AvailableMessages(Enum):
     command__activity_add__info_was_sent = auto()
     command__activity_add__info_was_saved = auto()
     command__activity_add__arguments_error = auto()
+    command__exercises = auto()
 
 
 MESSAGES = {
@@ -95,6 +96,9 @@ MESSAGES = {
     ),
     AvailableMessages.command__activity_add__info_was_saved: MessageTemplate(
         eng="Info about iteration was sent to out server."
+    ),
+    AvailableMessages.command__exercises: MessageWithParamsTemplate(
+        eng="I know about this list of activities:\n{}"
     )
 }
 
