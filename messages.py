@@ -92,10 +92,10 @@ MESSAGES = {
         eng="Relaxation can't be negative. {} is incorrect value."
     ),
     AvailableMessages.command__activity_add__info_was_sent: MessageTemplate(
-        eng="Info about iteration was saved. Thank you!"
+        eng="Info about iteration was sent to our server."
     ),
     AvailableMessages.command__activity_add__info_was_saved: MessageTemplate(
-        eng="Info about iteration was sent to out server."
+        eng="Info about iteration was saved. Thank you!"
     ),
     AvailableMessages.command__exercises: MessageWithParamsTemplate(
         eng="I know about this list of activities:\n{}"
