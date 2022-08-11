@@ -67,6 +67,11 @@ class AvailableMessages(Enum):
     command__activity_add__info_was_saved = auto()
     command__activity_add__arguments_error = auto()
     command__exercises = auto()
+    command__exercise_add__duplicate_error = auto()
+    command__exercise_add__info_was_sent = auto()
+    command__exercise_add__arguments_error = auto()
+    command__exercise_add__errors_pretext = auto()
+    command__exercise_add__info_was_saved = auto()
 
 
 MESSAGES = {
@@ -99,6 +104,21 @@ MESSAGES = {
     ),
     AvailableMessages.command__exercises: MessageWithParamsTemplate(
         eng="I know about this list of activities:\n{}"
+    ),
+    AvailableMessages.command__exercise_add__duplicate_error: MessageWithParamsTemplate(
+        eng="This exercise ({}) is already in list of allowed."
+    ),
+    AvailableMessages.command__exercise_add__errors_pretext: MessageTemplate(
+        eng="I can't save info about this new type of activity because:"
+    ),
+    AvailableMessages.command__exercise_add__info_was_sent: MessageTemplate(
+        eng="New exercise name was sent to our server."
+    ),
+    AvailableMessages.command__exercise_add__info_was_saved: MessageTemplate(
+        eng="New exercise was saved. Nice!"
+    ),
+    AvailableMessages.command__exercise_add__arguments_error: MessageTemplate(
+        eng="Please, type `/exercise_add exercise_name` and i will handle it :)"
     )
 }
 

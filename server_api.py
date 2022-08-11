@@ -18,3 +18,10 @@ def get_exercises():
     if r.status_code == 200:
         exercises = r.json()['list'][0]
     return exercises
+
+
+def send_exercise(exercise_name):
+    r = requests.post(f"{API_URL}/api/exercise/", data={
+        "name": exercise_name
+    })
+    return r.status_code == 200
