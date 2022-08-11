@@ -1,7 +1,7 @@
 import requests
 
-from constants import API_URL
 from messages import make_msg, AvailableLanguagesEnum, AvailableMessages
+from server_api import send_activity
 from .base import CommandHandler, URL
 
 
@@ -53,12 +53,8 @@ class ActivityAddCommandHandler(CommandHandler):
         command, activity_name, iterations_count, pause_before_item = text_parts
         iterations_count = int(iterations_count)
         pause_before_item = float(pause_before_item)
-        r = requests.post(f"{API_URL}/api/workout-item/", json={
-            "name": activity_name,
-            "iterations_count": iterations_count,
-            "pause_before_item": pause_before_item
-        })
-        if r.status_code == 200:
+        r = send_activity(activity_name, iterations_count, pause_before_item)
+        if r:
             requests.post(URL, params={
                 "chat_id": self.message_obj.message.chat.id,
                 "text": make_msg(
