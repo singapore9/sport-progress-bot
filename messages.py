@@ -76,6 +76,11 @@ class AvailableMessages(Enum):
     command__exercise_add__arguments_error = auto()
     command__exercise_add__errors_pretext = auto()
     command__exercise_add__info_was_saved = auto()
+    command__language__unknown_language = auto()
+    command__language__info_was_sent = auto()
+    command__language__arguments_error = auto()
+    command__language__errors_pretext = auto()
+    command__language__info_was_saved = auto()
 
 
 MESSAGES = {
@@ -141,7 +146,28 @@ MESSAGES = {
     AvailableMessages.command__exercise_add__arguments_error: MessageTemplate(
         eng="Please, type `/exercise_add exercise_name` and i will handle it :)",
         bel="Прашу цябе, выкарыстоўвай форму `/exercise_add назва`. Вось тады я захаваю назву :)"
-    )
+    ),
+    AvailableMessages.command__language__unknown_language: MessageWithParamsTemplate(
+        eng="I don't know {} language. You can set one of them: {}.",
+        bel="Выбачай, але я не ведаю {} мовы. Але я вывучаў {}, таму с задавальненнем магу іх выкарыстоўваць."
+    ),
+    AvailableMessages.command__language__errors_pretext: MessageTemplate(
+        eng="I can't save info about your language because:",
+        bel="Ёсць цяжкасці з захаваннем твайго адказу, таму што:"
+    ),
+    AvailableMessages.command__language__info_was_sent: MessageTemplate(
+        eng="Your new language was sent to our server.",
+        bel="Я адаслаў мову, якую ты выбраў, да серверу."
+    ),
+    AvailableMessages.command__language__info_was_saved: MessageTemplate(
+        eng="Your language was saved. Nice!",
+        bel="Добра! Цяпер я буду адказваць табе на тваёй мове!"
+    ),
+    AvailableMessages.command__language__arguments_error: MessageTemplate(
+        eng="Please, type `/languag language_name` and i will handle it :)",
+        bel="Выбачаюсь, але магу змяніць мову адказаў толькі калі ты выкарыстоўваеш форму `/exercise_add мова` :)"
+    ),
+
 }
 
 

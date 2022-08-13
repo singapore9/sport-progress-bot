@@ -40,3 +40,10 @@ def get_user_language(user_id):
     if language is None:
         language = AvailableLanguagesEnum.eng
     return language
+
+
+def set_user_language(user_id, language: AvailableLanguagesEnum):
+    r = requests.post(f"{API_URL}/api/language/{user_id}", data={
+        "language": language.name
+    })
+    return r.status_code == 200
