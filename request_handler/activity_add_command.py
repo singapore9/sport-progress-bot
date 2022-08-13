@@ -50,7 +50,7 @@ class ActivityAddCommandHandler(CommandHandler):
         command, activity_name, iterations_count, pause_before_item = text_parts
         iterations_count = int(iterations_count)
         pause_before_item = float(pause_before_item)
-        r = send_activity(activity_name, iterations_count, pause_before_item)
+        r = send_activity(self.user_id, activity_name, iterations_count, pause_before_item)
         if r:
             self.post_msg(
                 AvailableMessages.command__activity_add__info_was_sent

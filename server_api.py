@@ -6,12 +6,13 @@ from constants import API_URL
 from messages import AvailableLanguagesEnum
 
 
-def send_activity(activity_name, iterations_count, pause_before_item):
+def send_activity(user_id, activity_name, iterations_count, pause_before_item):
     r = requests.post(f"{API_URL}/api/workout-item/", json={
         "name": activity_name,
         "iterations_count": iterations_count,
         "pause_before_item": pause_before_item,
         "timestamp": int(time.time()),
+        "user_id": str(user_id),
     })
     return r.status_code == 200
 
