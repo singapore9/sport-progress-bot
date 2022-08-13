@@ -1,8 +1,6 @@
-import requests
-
-from messages import make_msg, AvailableLanguagesEnum, AvailableMessages
+from messages import AvailableMessages
 from server_api import get_exercises
-from .base import CommandHandler, URL
+from .base import CommandHandler
 
 
 class ExercisesCommandHandler(CommandHandler):
@@ -14,11 +12,4 @@ class ExercisesCommandHandler(CommandHandler):
         exercises = get_exercises()
         exercises_str = '\n'.join(list(sorted(exercises)))
 
-        requests.post(URL, params={
-            "chat_id": self.message_obj.message.chat.id,
-            "text": make_msg(
-                AvailableMessages.command__exercises,
-                AvailableLanguagesEnum.eng,
-                [exercises_str]
-            )
-        })
+        self.post_msg(AvailableMessages.command__exercises, [exercises_str])

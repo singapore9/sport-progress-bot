@@ -1,6 +1,7 @@
 import requests
 
 from constants import API_URL
+from messages import AvailableLanguagesEnum
 
 
 def send_activity(activity_name, iterations_count, pause_before_item):
@@ -25,3 +26,17 @@ def send_exercise(exercise_name):
         "name": exercise_name
     })
     return r.status_code == 200
+
+
+def get_user_language(user_id):
+    r = requests.get(f"{API_URL}/api/language/{user_id}")
+    language = None
+    if r.status_code == 200:
+        language = r.json()['language']
+        try:
+            language = AvailableLanguagesEnum[language]
+        except Exception as _:
+            language = None
+    if language is None:
+        language = AvailableLanguagesEnum.eng
+    return language

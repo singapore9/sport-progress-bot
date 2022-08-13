@@ -1,6 +1,6 @@
 import requests
 
-from messages import make_msg, AvailableLanguagesEnum, AvailableMessages
+from messages import AvailableMessages
 from server_api import send_activity, get_exercises
 from .base import CommandHandler, URL
 
@@ -17,9 +17,8 @@ class ActivityAddCommandHandler(CommandHandler):
         if activity_name not in allowed_activities:
             activities_str = ", ".join(allowed_activities)
             msgs.append(
-                make_msg(
+                self.make_msg(
                     AvailableMessages.command__activity_add__unknown_activity,
-                    AvailableLanguagesEnum.eng,
                     [activity_name, activities_str]
                 )
             )
@@ -29,9 +28,8 @@ class ActivityAddCommandHandler(CommandHandler):
                 raise ValueError
         except ValueError:
             msgs.append(
-                make_msg(
+                self.make_msg(
                     AvailableMessages.command__activity_add__iterations_count_error,
-                    AvailableLanguagesEnum.eng,
                     [iterations_count]
                 )
             )
@@ -41,9 +39,8 @@ class ActivityAddCommandHandler(CommandHandler):
                 raise ValueError
         except ValueError:
             msgs.append(
-                make_msg(
+                self.make_msg(
                     AvailableMessages.command__activity_add__pause_before_error,
-                    AvailableLanguagesEnum.eng,
                     [pause_before_item]
                 )
             )
@@ -55,35 +52,28 @@ class ActivityAddCommandHandler(CommandHandler):
         pause_before_item = float(pause_before_item)
         r = send_activity(activity_name, iterations_count, pause_before_item)
         if r:
-            requests.post(URL, params={
-                "chat_id": self.message_obj.message.chat.id,
-                "text": make_msg(
-                    AvailableMessages.command__activity_add__info_was_sent,
-                    AvailableLanguagesEnum.eng
-                )
-            })
+            self.post_msg(
+                AvailableMessages.command__activity_add__info_was_sent
+            )
 
     def handle(self):
         text_parts = self.message_obj.message.text.split(' ')
         msg = ''
         if len(text_parts) != 4:
-            msg = make_msg(
-                AvailableMessages.command__activity_add__arguments_error,
-                AvailableLanguagesEnum.eng
+            msg = self.make_msg(
+                AvailableMessages.command__activity_add__arguments_error
             )
         else:
             checks_result = self.types_check(text_parts)
             if checks_result:
-                pretext_msg = make_msg(
-                    AvailableMessages.command__activity_add__errors_pretext,
-                    AvailableLanguagesEnum.eng
+                pretext_msg = self.make_msg(
+                    AvailableMessages.command__activity_add__errors_pretext
                 )
                 msg = f"{pretext_msg}\n{checks_result}"
             else:
                 self.send_info_to_server(text_parts)
-                msg = make_msg(
-                    AvailableMessages.command__activity_add__info_was_saved,
-                    AvailableLanguagesEnum.eng
+                msg = self.make_msg(
+                    AvailableMessages.command__activity_add__info_was_saved
                 )
 
-        requests.post(URL, params={"chat_id": self.message_obj.message.chat.id, "text": msg})
+        requests.post(URL, params={"chat_id": self.user_id, "text": msg})

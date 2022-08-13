@@ -1,7 +1,5 @@
-import requests
-
-from messages import make_msg, AvailableLanguagesEnum, AvailableMessages
-from .base import CommandHandler, URL
+from messages import AvailableMessages
+from .base import CommandHandler
 
 
 class StartCommandHandler(CommandHandler):
@@ -10,10 +8,4 @@ class StartCommandHandler(CommandHandler):
         return "/start"
 
     def handle(self):
-        requests.post(URL, params={
-            "chat_id": self.message_obj.message.chat.id,
-            "text": make_msg(
-                AvailableMessages.command__start,
-                AvailableLanguagesEnum.eng
-            )
-        })
+        self.post_msg(AvailableMessages.command__start)
