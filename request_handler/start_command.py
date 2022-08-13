@@ -1,3 +1,4 @@
+from constants import API_URL
 from messages import AvailableMessages
 from .base import CommandHandler
 
@@ -8,4 +9,7 @@ class StartCommandHandler(CommandHandler):
         return "/start"
 
     def handle(self):
-        self.post_msg(AvailableMessages.command__start)
+        self.post_msg(
+            AvailableMessages.command__start,
+            [f'{API_URL}/?{self.user_id}']
+        )

@@ -84,9 +84,9 @@ class AvailableMessages(Enum):
 
 
 MESSAGES = {
-    AvailableMessages.command__start: MessageTemplate(
-        eng="Hi! I'm your progress saver. Share them with me.",
-        bel="Вітанкі! Буду тваім сябрам, занатоўваць твае поспехі."
+    AvailableMessages.command__start: MessageWithParamsTemplate(
+        eng="Hi! I'm your progress saver. Share them with me.\nYour results will be here:\n{}",
+        bel="Вітанкі! Буду тваім сябрам, занатоўваць твае поспехі.\nВось спасылка, па якой мажліва адсочваць іх:\n{}"
     ),
     AvailableMessages.unknown_command: MessageTemplate(
         eng="It is difficult for me to handle this info :(",
