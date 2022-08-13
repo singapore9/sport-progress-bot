@@ -5,6 +5,7 @@ from enum import Enum, auto
 
 class AvailableLanguagesEnum(Enum):
     eng = auto()
+    bel = auto()
 
 
 class BaseMessage:
@@ -30,12 +31,15 @@ class MessageWithParams(BaseMessage):
 
 
 class BaseMessageTemplate:
-    def __init__(self, eng: str):
+    def __init__(self, eng: str, bel: str):
         self.eng_template = eng
+        self.bel_tamplate = bel
 
     def get(self, lang: AvailableLanguagesEnum):
         if lang == AvailableLanguagesEnum.eng:
             return self.eng_template
+        elif lang == AvailableLanguagesEnum.bel:
+            return self.bel_tamplate
         return self.eng_template
 
     @classmethod
@@ -76,49 +80,67 @@ class AvailableMessages(Enum):
 
 MESSAGES = {
     AvailableMessages.command__start: MessageTemplate(
-        eng="Hi! I'm your progress saver. Share them with me."
+        eng="Hi! I'm your progress saver. Share them with me.",
+        bel="Вітанкі! Буду тваім сябрам, занатоўваць твае поспехі."
     ),
     AvailableMessages.unknown_command: MessageTemplate(
-        eng="It is difficult for me to handle this info :("
+        eng="It is difficult for me to handle this info :(",
+        bel="Пакуль што гэта незразумелая каманда для мяне :("
     ),
     AvailableMessages.command__activity_add__errors_pretext: MessageTemplate(
-        eng="Too nice, but i don't understand..."
+        eng="Too nice, but i don't understand...",
+        bel="Цудоўна, але не ўсё зразумела..."
     ),
     AvailableMessages.command__activity_add__arguments_error: MessageTemplate(
-        eng="Please, type `/activity_add activity_name iterations_count pause_before_item` and i will handle it :)"
+        eng="Please, type `/activity_add activity_name iterations_count pause_before_item` and i will handle it :)",
+        bel="Выкарыстоўвай, будзь ласка, такую форму "
+            "`/activity_add назва_практыкавання колькасць_разоў адпачынак_перад_практыкаваннем` і я с задавальненнем "
+            "запомню гэта :)"
     ),
     AvailableMessages.command__activity_add__unknown_activity: MessageWithParamsTemplate(
-        eng="This '{}' activity is unknown. I can save info about this activities: {}."
+        eng="This '{}' activity is unknown. I can save info about this activities: {}.",
+        bel="Гэтае практыкаванне '{}' невядома мне. Магу запомніць вось якія актыўнасці: {}."
     ),
     AvailableMessages.command__activity_add__iterations_count_error: MessageWithParamsTemplate(
-        eng="You can't do 1.5 push-ups, so {} is incorrect number for counting activities in 1 iteration too."
+        eng="You can't do 1.5 push-ups, so {} is incorrect number for counting activities in 1 iteration too.",
+        bel="Як немагчыма выканаць 1.5 адціскванняў ад падлогі, "
+            "так немагчыма выканаць і {} разоў ў адзінай ітэрацыі практыкавання."
     ),
     AvailableMessages.command__activity_add__pause_before_error: MessageWithParamsTemplate(
-        eng="Relaxation can't be negative. {} is incorrect value."
+        eng="Relaxation can't be negative. {} is incorrect value.",
+        bel="Нельга адпачыць меньш нуля хвілін/секунд. Таму {} - памылковая колькасць секунд."
     ),
     AvailableMessages.command__activity_add__info_was_sent: MessageTemplate(
-        eng="Info about iteration was sent to our server."
+        eng="Info about iteration was sent to our server.",
+        bel="Адаслаў дадзенныя аб выкананам практыкаванні да серверу."
     ),
     AvailableMessages.command__activity_add__info_was_saved: MessageTemplate(
-        eng="Info about iteration was saved. Thank you!"
+        eng="Info about iteration was saved. Thank you!",
+        bel="Дадзенныя паспехова захваны. Дзякуй!"
     ),
     AvailableMessages.command__exercises: MessageWithParamsTemplate(
-        eng="I know about this list of activities:\n{}"
+        eng="I know about this list of activities:\n{}",
+        bel="Я ведаю толькі гэтыя практыкаванні:\n{}"
     ),
     AvailableMessages.command__exercise_add__duplicate_error: MessageWithParamsTemplate(
-        eng="This exercise ({}) is already in list of allowed."
+        eng="This exercise ({}) is already in list of allowed.",
+        bel="Гэтае практыкаванне ({}) ужо вядома мне"
     ),
     AvailableMessages.command__exercise_add__errors_pretext: MessageTemplate(
-        eng="I can't save info about this new type of activity because:"
+        eng="I can't save info about this new type of activity because:",
+        bel="Няма магчымасці захаваць новую назву практыкавання, таму што:"
     ),
     AvailableMessages.command__exercise_add__info_was_sent: MessageTemplate(
-        eng="New exercise name was sent to our server."
+        eng="New exercise name was sent to our server.",
+        bel="Я адаслаў назву новага практыкавання да серверу."
     ),
     AvailableMessages.command__exercise_add__info_was_saved: MessageTemplate(
-        eng="New exercise was saved. Nice!"
+        eng="New exercise was saved. Nice!",
+        bel="Новае практыкаванне захавана. Цуд!"
     ),
     AvailableMessages.command__exercise_add__arguments_error: MessageTemplate(
-        eng="Please, type `/exercise_add exercise_name` and i will handle it :)"
+        eng="Please, type `/exercise_add exercise_name` and i will handle it :)",
+        bel="Прашу цябе, выкарыстоўвай форму `/exercise_add назва`. Вось тады я захаваю назву :)"
     )
 }
 
