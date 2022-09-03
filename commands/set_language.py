@@ -3,6 +3,7 @@ import json
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
+
 from commands.constants import COMMAND_KEY, SET_LANGUAGE_SLUG
 from server_api import AvailableLanguagesEnum, set_user_language
 

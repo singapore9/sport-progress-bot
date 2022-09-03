@@ -3,8 +3,9 @@ import json
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
+
 from commands.constants import COMMAND_KEY, ACTIVITY_ADD_SLUG
-from commands.numeric_keyboard import get_numeric_keyboard
+from commands.utils.numeric_keyboard import get_numeric_keyboard
 from server_api import get_exercises, send_activity
 
 
