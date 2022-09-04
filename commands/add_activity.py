@@ -5,7 +5,9 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 
 from commands.constants import COMMAND_KEY, ACTIVITY_ADD_SLUG
+from commands.utils.additional_params import pass_language
 from commands.utils.numeric_keyboard import get_numeric_keyboard
+from messages import AvailableLanguagesEnum, AvailableMessages, make_msg
 from server_api import get_exercises, send_activity
 
 
@@ -15,7 +17,8 @@ class AddActivityCommandKeys(Enum):
     step3 = "3"
 
 
-async def activity_add(update: Update, context: CallbackContext) -> None:
+@pass_language
+async def activity_add(language: AvailableLanguagesEnum, update: Update, context: CallbackContext) -> None:
     exercises = get_exercises()
     keyboard = [
             [
@@ -25,9 +28,12 @@ async def activity_add(update: Update, context: CallbackContext) -> None:
                 ),
             ] for exercise in exercises
     ]
-
+    msg = make_msg(
+        AvailableMessages.command__activity_add__select,
+        language
+    )
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text('Please choose:', reply_markup=reply_markup)
+    await update.message.reply_text(msg, reply_markup=reply_markup)
 
 
 class AddActivityCommand:

@@ -5,14 +5,17 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 
 from commands.constants import COMMAND_KEY, SET_LANGUAGE_SLUG
-from server_api import AvailableLanguagesEnum, set_user_language
+from commands.utils.additional_params import pass_language
+from messages import AvailableLanguagesEnum, AvailableMessages, make_msg
+from server_api import set_user_language
 
 
 class SetLanguageCommandKeys(Enum):
     step1 = "1"
 
 
-async def set_language(update: Update, context: CallbackContext) -> None:
+@pass_language
+async def set_language(language: AvailableLanguagesEnum, update: Update, context: CallbackContext) -> None:
     keyboard = [
             [
                 InlineKeyboardButton(
@@ -23,7 +26,11 @@ async def set_language(update: Update, context: CallbackContext) -> None:
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text('Please choose:', reply_markup=reply_markup)
+    msg = make_msg(
+        AvailableMessages.command__language__select,
+        language
+    )
+    await update.message.reply_text(msg, reply_markup=reply_markup)
 
 
 class SetLanguageCommand:
