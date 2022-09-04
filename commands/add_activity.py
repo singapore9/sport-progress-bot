@@ -51,26 +51,42 @@ class AddActivityCommand:
         return json.dumps(data)
 
     @classmethod
-    async def done(cls, query, data):
+    async def done(cls, user_id, language, query, data):
         activity_name = data.get(AddActivityCommandKeys.step1.value)
         count = data.get(AddActivityCommandKeys.step2.value)
         seconds = data.get(AddActivityCommandKeys.step3.value)
-        await query.edit_message_text(f"Sent:\nactivity_add {activity_name} {count[2:]} {seconds[2:]}")
+        command = f"activity_add {activity_name} {count[2:]} {seconds[2:]}"
+        msg = make_msg(
+            AvailableMessages.base_command__info_was_sent,
+            language,
+            [command, ]
+        )
+        await query.edit_message_text(msg)
         iterations_count = int(count[2:])
         pause_before_item = int(seconds[2:])
-        r = send_activity(query.from_user.id, activity_name, iterations_count, pause_before_item)
+        r = send_activity(user_id, activity_name, iterations_count, pause_before_item)
         if r:
-            await query.edit_message_text(f"Successfully saved:\nactivity_add {activity_name} {count[2:]} {seconds[2:]}")
+            msg = make_msg(
+                AvailableMessages.base_command__info_was_saved,
+                language,
+                [command, ]
+            )
+            await query.edit_message_text(msg)
 
     @classmethod
-    async def step3(cls, query, data):
+    async def step3(cls, user_id, language, query, data):
         activity_name = data.get(AddActivityCommandKeys.step1.value)
         count = data.get(AddActivityCommandKeys.step2.value)
         seconds = data.get(AddActivityCommandKeys.step3.value)
         if seconds is None or "ok" not in seconds:
+            command = f"activity_add {activity_name} {count[2:]} {seconds or ''}"
+            msg = make_msg(
+                AvailableMessages.command__activity_add__step3__select,
+                language,
+                [command, ]
+            )
             await query.edit_message_text(
-                f"Please type waiting time (seconds) before starting this set of repetitions:\n"
-                f"activity_add {activity_name} {count[2:]} {seconds or ''}",
+                msg,
                 reply_markup=get_numeric_keyboard(
                     AddActivityCommandKeys.step3.value,
                     data,
@@ -78,15 +94,21 @@ class AddActivityCommand:
                 )
             )
         else:
-            await cls.done(query, data)
+            await cls.done(user_id, language, query, data)
 
     @classmethod
-    async def step2(cls, query, data):
+    async def step2(cls, user_id, language, query, data):
         activity_name = data.get(AddActivityCommandKeys.step1.value)
         count = data.get(AddActivityCommandKeys.step2.value)
         if count is None or "ok" not in count:
+            command = f"activity_add {activity_name} {count or ''}"
+            msg = make_msg(
+                AvailableMessages.command__activity_add__step2__select,
+                language,
+                [command, ]
+            )
             await query.edit_message_text(
-                f"Please type repetitions count:\nactivity_add {activity_name} {count or ''}",
+                msg,
                 reply_markup=get_numeric_keyboard(
                     AddActivityCommandKeys.step2.value,
                     data,
@@ -94,16 +116,19 @@ class AddActivityCommand:
                 )
             )
         else:
-            await cls.step3(query, data)
+            await cls.step3(user_id, language, query, data)
 
     @classmethod
-    async def step1(cls, query, data):
+    async def step1(cls, user_id, language, query, data):
         activity_name = data.get(AddActivityCommandKeys.step1.value)
         exercises = get_exercises()
         if activity_name is None:
+            msg = make_msg(
+                AvailableMessages.command__activity_add__step1__select,
+                language
+            )
             await query.edit_message_text(
-                f"Please choose exercise:\n"
-                f"activity_add ",
+                msg,
                 reply_markup=InlineKeyboardMarkup([
                     [
                         InlineKeyboardButton(
@@ -114,4 +139,4 @@ class AddActivityCommand:
                 ])
             )
         else:
-            await cls.step2(query, data)
+            await cls.step2(user_id, language, query, data)

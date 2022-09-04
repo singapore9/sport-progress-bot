@@ -5,8 +5,10 @@ from fastapi import FastAPI, Request
 from telegram import Update
 from telegram.ext import (ApplicationBuilder, CommandHandler, CallbackQueryHandler, CallbackContext, MessageHandler)
 from telegram.ext.filters import TEXT, COMMAND
+
 from commands import COMMAND_KEY, COMMAND_ACTIVITY_BY_COMMAND_KEY, COMMAND_HANDLER_BY_COMMAND_NAME
 from constants import TELEGRAM_TOKEN
+from server_api import get_user_language
 
 
 logging.basicConfig(
@@ -21,6 +23,8 @@ logger = logging.getLogger(__name__)
 async def button(update: Update, context: CallbackContext) -> None:
     """Parses the CallbackQuery and updates the message text."""
     query = update.callback_query
+    user_id = update.callback_query['from']['id']
+    language = get_user_language(user_id)
 
     # CallbackQueries need to be answered, even if no notification to the user is needed
     # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
@@ -29,7 +33,7 @@ async def button(update: Update, context: CallbackContext) -> None:
     command_name = data.get(COMMAND_KEY)
     CommandClass = COMMAND_ACTIVITY_BY_COMMAND_KEY.get(command_name)
     if CommandClass:
-        await CommandClass.step1(query, data)
+        await CommandClass.step1(user_id, language, query, data)
     else:
         await query.edit_message_text(text="unhandled command.. :)")
 

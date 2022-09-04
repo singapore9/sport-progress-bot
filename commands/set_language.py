@@ -19,10 +19,10 @@ async def set_language(language: AvailableLanguagesEnum, update: Update, context
     keyboard = [
             [
                 InlineKeyboardButton(
-                    f"{language.name.capitalize()}",
-                    callback_data=SetLanguageCommand.dumps(step1=language.name)
+                    f"{lang.name.capitalize()}",
+                    callback_data=SetLanguageCommand.dumps(step1=lang.name)
                 ),
-            ] for language in AvailableLanguagesEnum
+            ] for lang in AvailableLanguagesEnum
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -44,21 +44,35 @@ class SetLanguageCommand:
         return json.dumps(data)
 
     @classmethod
-    async def done(cls, query, data):
+    async def done(cls, user_id, language, query, data):
         language_name = data.get(SetLanguageCommandKeys.step1.value)
-        language = AvailableLanguagesEnum[language_name]
-        await query.edit_message_text(f"Sent:\nlanguage {language_name}")
-        r = set_user_language(query.from_user.id, language)
+        new_language = AvailableLanguagesEnum[language_name]
+        command = f"language {language_name}"
+        msg = make_msg(
+            AvailableMessages.base_command__info_was_sent,
+            new_language,
+            [command, ]
+        )
+        await query.edit_message_text(msg)
+        r = set_user_language(user_id, new_language)
         if r:
-            await query.edit_message_text(f"Successfully saved:\nlanguage {language_name}")
+            msg = make_msg(
+                AvailableMessages.base_command__info_was_saved,
+                new_language,
+                [command, ]
+            )
+            await query.edit_message_text(msg)
 
     @classmethod
-    async def step1(cls, query, data):
+    async def step1(cls, user_id, language, query, data):
         language_name = data.get(SetLanguageCommandKeys.step1.value)
         if language_name is None:
+            msg = make_msg(
+                AvailableMessages.command__language__step1__select,
+                language
+            )
             await query.edit_message_text(
-                f"Please choose preferred language:\n"
-                f"language ",
+                msg,
                 reply_markup=[
                     [
                         InlineKeyboardButton(
@@ -69,4 +83,4 @@ class SetLanguageCommand:
                 ]
             )
         else:
-            await cls.done(query, data)
+            await cls.done(user_id, language, query, data)
