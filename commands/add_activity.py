@@ -19,14 +19,14 @@ class AddActivityCommandKeys(Enum):
 
 @pass_language
 async def activity_add(language: AvailableLanguagesEnum, update: Update, context: CallbackContext) -> None:
-    exercises = get_exercises()
+    exercises = get_exercises(language)
     keyboard = [
             [
                 InlineKeyboardButton(
-                    f"{exercise}",
-                    callback_data=AddActivityCommand.dumps(step1=exercise)
+                    f"{localized_name}",
+                    callback_data=AddActivityCommand.dumps(step1=exercise_code)
                 ),
-            ] for exercise in exercises
+            ] for exercise_code, localized_name in exercises
     ]
     msg = make_msg(
         AvailableMessages.command__activity_add__select,
@@ -121,7 +121,7 @@ class AddActivityCommand:
     @classmethod
     async def step1(cls, user_id, language, query, data):
         activity_name = data.get(AddActivityCommandKeys.step1.value)
-        exercises = get_exercises()
+        exercises = get_exercises(language)
         if activity_name is None:
             msg = make_msg(
                 AvailableMessages.command__activity_add__step1__select,
@@ -132,10 +132,10 @@ class AddActivityCommand:
                 reply_markup=InlineKeyboardMarkup([
                     [
                         InlineKeyboardButton(
-                            f"{exercise}",
-                            callback_data=cls.dumps(step1=exercise)
+                            f"{localized_name}",
+                            callback_data=cls.dumps(step1=exercise_code)
                         ),
-                    ] for exercise in exercises
+                    ] for exercise_code, localized_name in exercises
                 ])
             )
         else:

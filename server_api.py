@@ -17,8 +17,8 @@ def send_activity(user_id, activity_name, iterations_count, pause_before_item):
     return r.status_code == 200
 
 
-def get_exercises():
-    r = requests.get(f"{API_URL}/api/exercise/")
+def get_exercises(language: AvailableLanguagesEnum):
+    r = requests.get(f"{API_URL}/api/exercise/translate/{language.name}")
     exercises = []
     if r.status_code == 200:
         exercises = r.json()['list'][0]

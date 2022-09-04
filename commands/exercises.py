@@ -8,8 +8,8 @@ from server_api import get_exercises
 
 @pass_language
 async def exercises(language: AvailableLanguagesEnum, update: Update, context: CallbackContext) -> None:
-    exercises = get_exercises()
-    exercises_str = '\n'.join(list(sorted(exercises)))
+    exercises = get_exercises(language)
+    exercises_str = '\n'.join(sorted([item[1] for item in exercises]))
     msg = make_msg(
         AvailableMessages.command__exercises,
         language,
