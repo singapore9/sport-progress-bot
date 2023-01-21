@@ -3,6 +3,7 @@ from commands.constants import ACTIVITY_ADD_SLUG, SET_LANGUAGE_SLUG, COMMAND_KEY
 from commands.exercises import exercises
 from commands.set_language import set_language, SetLanguageCommand
 from commands.start import start
+from commands.magic_action import do_commits
 
 COMMAND_ACTIVITY_BY_COMMAND_KEY = {
     ACTIVITY_ADD_SLUG: AddActivityCommand,
@@ -13,5 +14,6 @@ COMMAND_HANDLER_BY_COMMAND_NAME = {
     'activity_add': activity_add,
     'exercises': exercises,
     'language': set_language,
-    'start': start
+    'start': start,
+    'magic': do_commits,
 }
