@@ -67,5 +67,4 @@ async def webhook_handler(req: Request):
         update = Update.de_json(data, tg_application.bot)
         await tg_application.process_update(update)
     except Exception as e:
-        logger.error(f'-> Webhook Error: {e}')
         print(f'Webhook error: {e}')

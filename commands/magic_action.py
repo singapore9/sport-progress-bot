@@ -12,9 +12,6 @@ from constants import (
 from telegram import Update
 from telegram.ext import CallbackContext
 
-from commands.utils.additional_params import pass_user_id, pass_language
-from messages import AvailableLanguagesEnum
-
 
 def push_to_github(username, repo, newline, branch, token):
     change_file_endpoint = (
@@ -45,18 +42,15 @@ def push_to_github(username, repo, newline, branch, token):
     return resp
 
 
-@pass_user_id
-@pass_language
-async def do_commits(user_id: int, language: AvailableLanguagesEnum, update: Update, context: CallbackContext) -> None:
+async def do_commits(update: Update, context: CallbackContext) -> None:
+    print('im do commits')
     for i in range(random.randrange(2, 7)):
         timestamp = time.time()
         print(timestamp)
         push_to_github(GITHUB_ACCOUNT_USERNAME, GITHUB_REPO_NAME, timestamp, 'main', GITHUB_ACCESS_TOKEN)
 
 
-@pass_user_id
-@pass_language
-async def do_commits2(user_id: int, language: AvailableLanguagesEnum, update: Update, context: CallbackContext) -> None:
+async def do_commits2(update: Update, context: CallbackContext) -> None:
     for i in range(random.randrange(2, 7)):
         timestamp = time.time()
         print(timestamp)
